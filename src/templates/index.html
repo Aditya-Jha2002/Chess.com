@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+  <!--From https://codepen.io/frytyler/pen/EGdtg-->
+  <head>
+    <meta charset="UTF-8" />
+    <title>ML API</title>
+    <!-- Bootstrap core CSS -->
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Custom styles for this template -->
+    <link href="/static/css/form_upload.css" rel="stylesheet" />
+
+    <link
+      href="https://fonts.googleapis.com/css?family=Pacifico"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Arimo"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Hind:300"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+  </head>
+
+  <body>
+    <div class="login">
+      <h1>Predict Win Chances</h1>
+
+      <!-- Main Input For Receiving Query to our ML -->
+      <div class = "containers">
+      <form action="{{ url_for('predict')}}" method="post">
+        <input
+          type="text"
+          name="white_rating"
+          placeholder="White Rating"
+          required="required"
+        /><br />
+        <input
+          type="text"
+          name="black_rating"
+          placeholder="Black Rating"
+          required="required"
+        /><br />
+        <label for="time_class">Time Class:</label>
+        <select class='form-select' id="time_class" name="time_class">
+          <option value="blitz">Blitz</option>
+          <option value="daily">Daily</option>
+          <option value="rapid">Rapid</option>
+          <option value="bullet">Bullet</option>
+          </select>
+          <br />
+        <input
+          type="text"
+          name="time_control"
+          placeholder="Time Control"
+          required="required"
+        /><br />
+        <label for="rules">Rule</label>
+        <select id="rules" name="rules">
+          <option value="chess">Chess</option>
+          <option value="chess960">Chess960</option>
+          <option value="threecheck">Rapid</option>
+          <option value="crazyhouse">Bullet</option>
+          <option value="kingofhehill">King of the Hill</option></select
+        ><br />
+          <br/>
+        <input type="radio" id='rated' name="ratedornot" required="required"
+        value="Rated/">
+        <label for="rated">Rated</label><br />
+        <input
+          type="radio"
+          id="unrated"
+          name="ratedornot"
+          required="required"
+          value="Unrated"
+        />
+        <label for="unrated">Unrated</label><br />
+
+        <input
+          type="text"
+          name="tournament"
+          placeholder="Tournament"
+          required="required"
+        /><br />
+        <input
+          type="text"
+          name="first_move"
+          placeholder="First Move"
+          require="required"
+        /><br />
+        <button type="submit" class="btn btn-primary btn-block btn-large">
+          Predict
+        </button>
+      </form>
+
+      <br />
+      <br />
+      {{ prediction_text }}
+    </div>
+  </div>
+  </body>
+</html>

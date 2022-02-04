@@ -23,17 +23,32 @@ class Extract_features():
             self.df[feature_name] = self.df['pgn'].apply(
                 lambda x: x.split('\n')[position].split('"')[1])
 
+        def extract_move(pgn):
+            if(pgn.find('{[') == -1):
+                original_list = pgn.split("\n")[-2].split()
+                toberemoved_list = pgn.split("\n")[-2].split()[::3]
+                new_list = [x for x in original_list if x not in toberemoved_list]
+                return new_list
+            else:
+                return pgn.split("\n")[-2].split()[1::4]
+
+        self.df['Moves'] = self.df['pgn'].apply(extract_move)
+        self.df.Moves.fillna('X', inplace=True)
+
         # The ECO Codes is a classification system for the chess openings moves.<br>
         # There are five main categories, "A" to "E", corresponding to the five volumes of the
         # earlier editions, each of which is further subdivided into 100 subcategories, for a
         # total of 500 codes. The term "ECO" is often used as a shorthand for this coding system.
         # We can also extract the Eco_Name using the EcoName feature we extracted from the pgn
 
-        self.df['Eco_Name'] = self.df.EcoName.apply(lambda x: x.split('/')[-1])
+        self.df['Eco_Name'] = self.df['EcoName'].apply(lambda x: x.split('/')[-1])
 
         # Upon seeing both the pgn of the 1st row and the 2nd row I noticed a difference,
         # There are two types of game here, played in a Tournament, and played as a regular match
         # Using this Information we can create another feature :- Is_Tournament
 
         self.df['Is_tournament'] = self.df['Game_Type'].apply(lambda x: 'tournament' in x)
+
+        self.df['White_first_move'] = self.df['Moves'].apply(lambda x: x[0] if len(x)!=0 else None)
+
         self.df.to_csv(os.path.join(self.path, 'games.csv'))
